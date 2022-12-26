@@ -1,0 +1,56 @@
+# 二号機へログイン（conda/dockerあり）
+ssh bonohulab2@10.28.16.58 -p 10022
+bonohulab2020
+###
+スペック 14コア
+RAM 240 GB (WSL2部分)
+###
+
+# 作業ディレクトリへ移動
+cd Nakamae
+cd RNA_offtarget_analysis
+# 作業ディレクトリ作成
+mkdir RNA_offtarget_analysis_v1_GSE121668_fastq;
+cd RNA_offtarget_analysis_v1_GSE121668_fastq;
+
+# ヒト用STARマッピングを行うためのDockerイメージ作成
+# ヒト用STARマッピングを行うためのイメージ作成用ディレクトリ
+mkdir star_image;
+cd star_image;
+mkdir hg38_index;
+# ヒト用STARマッピングを行うためのイメージをビルド
+touch Dockerfile;
+vi Dockerfile; # Dockerfileを作成
+
+```Dockerfile
+############################################################
+# Dockerfile to build STAR Mapping in human (GATK resource bundle hg38)
+############################################################
+
+FROM mambaorg/micromamba:0.13.1
+
+# File Author / Maintainer
+MAINTAINER Kazuki Nakamae
+RUN conda install -c bioconda star --yes \
+  && conda clean --all --yes
+
+# install MaChIAto
+COPY . .
+WORKDIR .
+
+RUN STAR --runMode genomeGenerate --genomeDir hg38_index --genomeFastaFiles resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta --limitGenomeGenerateRAM 200000000000
+```
+
+# 一旦ホストのPCに戻って、下記のファイルをダウンロード（直接はとれないっぽい）
+https://console.cloud.google.com/storage/browser/_details/genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.fasta
+# リモートへコピー
+rsync -e "ssh -p 10022" -avvz --progress resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta bonohulab2@10.28.16.58:/home/bonohulab2/Nakamae/RNA_offtarget_analysis/RNA_offtarget_analysis_v1_GSE121668_fastq/star_image
+bonohulab2020
+
+ssh bonohulab2@10.28.16.58 -p 10022
+bonohulab2020
+cd Nakamae/RNA_offtarget_analysis/RNA_offtarget_analysis_v1_GSE121668_fastq/star_image
+
+# Dockerイメージを作成
+cd ..;
+docker build -t kazukinakamae/star_for_human_gatk:latest ./star_image;
