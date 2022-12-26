@@ -28,7 +28,7 @@ Pipeline for CRISPR-induced Transcriptome Unintended RNA Editing Analysis
 ### （操作A）リポジストリをクローン
 
 ```bash
-git clone https://github.com/KazukiNakamae/PtTIDE;
+git clone https://github.com/KazukiNakamae/PiCTURE;
 ```
 
 ### （操作B）mainからtestブランチを作成
