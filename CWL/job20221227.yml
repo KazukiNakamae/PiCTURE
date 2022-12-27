@@ -1,0 +1,16 @@
+# やっぱりgenomeDirを読み込まない。。。。
+
+genomeDir:
+  class: Directory
+  path: ../hg38_index
+fq1:
+  class: File
+  path: 1_trim_galore/SRR8096262_1_val_1.fq.gz
+    # format: http://edamontology.org/format_1930
+fq2:
+  class: File
+  path: 1_trim_galore/SRR8096262_2_val_2.fq.gz
+    # format: http://edamontology.org/format_1930
+runThreadN: 14
+outSAMtype: [BAM, SortedByCoordinate]
+outFileNamePrefix: star_20221227
