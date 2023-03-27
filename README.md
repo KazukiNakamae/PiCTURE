@@ -15,13 +15,17 @@ cd PiCTURE/Docker;
 ### Parepare PiCTURE pipeline using preparation.sh
 
 PiCTUREパイプラインは出力ディレクトリ内で処理が完結するように設計されています。
-まず次のコマンドを実行して出力ディレクトリとDockerイメージの作成を行なってください。
+まず[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)からhg38用のダウンロードページに入り、以下のファイルをダウンロードしてください。
+- resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta
+
+このファイルをDockerディクレクトリに配置後、
+次のコマンドを実行して出力ディレクトリとDockerイメージの作成を行なってください。
 
 ```
 preparation.sh　<output directory name>
 ```
 
-[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)からhg38用のダウンロードページに入り、以下のファイルをダウンロードしてください。
+次にまた[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)からhg38用のダウンロードページに入り、以下のファイルをダウンロードしてください。
 - resources-broad-hg38-v0-Homo_sapiens_assembly38.dict 
 - resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta
 - resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai

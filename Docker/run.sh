@@ -51,7 +51,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/star_for_human_gatk:latest \
+     --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/star_for_human_gatk:1.0 \
      STAR \
      --genomeDir ../hg38_index --readFilesIn 1_trim_galore/${input_name}_F_val_1.fq 1_trim_galore/${input_name}_R_val_2.fq \
      --runThreadN 14 --outSAMtype BAM SortedByCoordinate \
@@ -67,7 +67,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/star_for_human_gatk:latest \
+     --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/star_for_human_gatk:1.0 \
      STAR \
      --genomeDir ../hg38_index \
      --sjdbFileChrStartEnd 2_star/star_${input_name}_SJ.out.tab \

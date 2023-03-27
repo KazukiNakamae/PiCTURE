@@ -6,7 +6,7 @@ FROM mambaorg/micromamba:0.13.1
 
 # File Author / Maintainer
 MAINTAINER Kazuki Nakamae
-RUN conda install -c bioconda star=v2.7.10b --yes \
+RUN conda install -c bioconda star=2.7.4a --yes \
   && conda clean --all --yes
 
 # Copy reference genome

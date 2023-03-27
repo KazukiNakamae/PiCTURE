@@ -18,6 +18,7 @@ mkdir ${output}/6_haplotypecaller;
 
 echo "Download Docker images"
 docker pull clinicalgenomics/trim_galore:0.6.7;
+docker pull broadinstitute/gatk:4.3.0.0;
 
 echo "Create STAR index in docker image"
 docker build -t kazukinakamae/star_for_human_gatk:1.0 .;
