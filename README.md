@@ -57,7 +57,7 @@ joint_preparation;
 
 それぞれの引数の説明はこちらになります。
 ```
-<raw forward.fastq> & <raw reverse.fastq>: RAN-seqのraw fastqデータになります。gzipは受け入れていません。
+<raw forward.fastq> & <raw reverse.fastq>: RAN-seqのraw fastqデータのパスを入力します。gzipファイルは受け付けていません。
 <sample name>: サンプル名です。ユニークな文字列であれば何度もよいですが、基本的にはSRAのRun IDを入力することを推奨します。
 <output directory name>: 出力ディレクトリ名です。preparation.shで入力したものと同一である必要があります。
 ```
