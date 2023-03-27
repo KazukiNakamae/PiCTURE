@@ -9,7 +9,7 @@ Pipeline for CRISPR-induced Transcriptome Unintended RNA Editing Analysis
 
 ```
 git clone https://github.com/KazukiNakamae/PiCTURE.git;
-cd Docker;
+cd PiCTURE/Docker;
 ```
 
 ### Parepare PiCTURE pipeline using preparation.sh
@@ -21,7 +21,7 @@ PiCTUREパイプラインは出力ディレクトリ内で処理が完結する�
 preparation.sh　<output directory name>
 ```
 
-[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)から以下のファイルをダウンロードしてください。
+[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)からhg38用のダウンロードページに入り、以下のファイルをダウンロードしてください。
 - resources-broad-hg38-v0-Homo_sapiens_assembly38.dict 
 - resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta
 - resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai
@@ -61,6 +61,8 @@ joint_preparation;
 <sample name>: サンプル名です。ユニークな文字列であれば何度もよいですが、基本的にはSRAのRun IDを入力することを推奨します。
 <output directory name>: 出力ディレクトリ名です。preparation.shで入力したものと同一である必要があります。
 ```
+
+完了すると、出力ディレクトリ内に各ステップの処理結果が出力されます。
 
 ## 開発工程におけるgithubの扱い方
 

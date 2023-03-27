@@ -34,7 +34,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --rm -d -v `pwd`:/DATA -w /DATA -i clinicalgenomics/trim_galore:0.6.7 \
+     --rm -v `pwd`:/DATA -w /DATA -i clinicalgenomics/trim_galore:0.6.7 \
      trim_galore \
      -j 14 --fastqc --trim1 \
      --output_dir 1_trim_galore --paired 0_rawdata/${input_name}_F.fastq 0_rawdata/${input_name}_R.fastq;
@@ -51,7 +51,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --rm -d -v `pwd`:/DATA -w /DATA -i kazukinakamae/star_for_human_gatk:latest \
+     --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/star_for_human_gatk:latest \
      STAR \
      --genomeDir ../hg38_index --readFilesIn 1_trim_galore/${input_name}_F_val_1.fq 1_trim_galore/${input_name}_R_val_2.fq \
      --runThreadN 14 --outSAMtype BAM SortedByCoordinate \
@@ -67,7 +67,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --rm -d -v `pwd`:/DATA -w /DATA -i kazukinakamae/star_for_human_gatk:latest \
+     --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/star_for_human_gatk:latest \
      STAR \
      --genomeDir ../hg38_index \
      --sjdbFileChrStartEnd 2_star/star_${input_name}_SJ.out.tab \
@@ -100,7 +100,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --name nakamae_baserecalibrator -d --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+     --name nakamae_baserecalibrator --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
      gatk BaseRecalibrator \
      -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
      -I 4_bam_preparation/${input_name}.complete.bam \
@@ -118,7 +118,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --name nakamae_bsqr -d --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+     --name nakamae_bsqr --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
      gatk ApplyBQSR \
      -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
      -I 5_recal_data/${input_name}.complete.bam \
@@ -136,7 +136,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --name nakamae_post_baserecalibrator -d --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+     --name nakamae_post_baserecalibrator --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
      gatk BaseRecalibrator \
      -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
      -I 5_recal_data/${input_name}.dbsnp_only.BQSR.bam \
@@ -154,7 +154,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --name nakamae_analysecov -d --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+     --name nakamae_analysecov --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
      gatk AnalyzeCovariates \
      -before 5_recal_data/${input_name}_dbsnp_only_recal_data.table \
      -after 5_recal_data/${input_name}_dbsnp_only_post_recal_data.table \
