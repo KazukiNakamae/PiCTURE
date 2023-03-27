@@ -6,10 +6,11 @@ FROM mambaorg/micromamba:0.13.1
 
 # File Author / Maintainer
 MAINTAINER Kazuki Nakamae
-RUN conda install -c bioconda star --yes \
+RUN conda install -c bioconda star=v2.7.10b --yes \
   && conda clean --all --yes
 
-COPY . .
+# Copy reference genome
+COPY hg38_index/ ./hg38_index/
 WORKDIR .
 
 RUN STAR --runMode genomeGenerate --genomeDir hg38_index --genomeFastaFiles resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta --limitGenomeGenerateRAM 200000000000

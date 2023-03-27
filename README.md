@@ -1,6 +1,67 @@
 # PiCTURE
 Pipeline for CRISPR-induced Transcriptome Unintended RNA Editing Analysis
 
+## Run PiCTURE with Docker
+
+### Download PiCTURE pipeline using preparation.sh
+
+最新のPiCTUREをダウンロードして、Dockerディレクトリをカレンとディレクトリに設定してください。
+
+```
+git clone https://github.com/KazukiNakamae/PiCTURE.git;
+cd Docker;
+```
+
+### Parepare PiCTURE pipeline using preparation.sh
+
+PiCTUREパイプラインは出力ディレクトリ内で処理が完結するように設計されています。
+まず次のコマンドを実行して出力ディレクトリとDockerイメージの作成を行なってください。
+
+```
+preparation.sh　<output directory name>
+```
+
+[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)から以下のファイルをダウンロードしてください。
+- resources-broad-hg38-v0-Homo_sapiens_assembly38.dict 
+- resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta
+- resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai
+- resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf
+- resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf.idx
+
+ダウンロードしたファイルを下記のコマンドにしたがって出力ディレクトリ内に配置してください。
+```
+cp resources-broad-hg38-v0-Homo_sapiens_assembly38.dict <output directory name>/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.dict;
+cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta <output directory name>/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta;
+cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai <output directory name>/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai;
+cp resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf;
+cp resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf.idx <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf.idx;
+cp resources-broad-hg38-v0-Homo_sapiens_assembly38.dict <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.dict;
+cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai;
+cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta;
+```
+
+完了です。この出力ファイルはサンプルごとに何度も作る必要はなく、一度作ってしまえばあとは下記のrun.shで使いまわせます。
+
+### Run PiCTURE pipeline using run.sh
+
+各サンプルごとに次のコマンドを実行してバリアントコールまでを実施してください。
+
+```
+run.sh　\
+<raw forward.fastq> \
+<raw reverse.fastq> \
+<sample name> \
+<output directory name> \
+joint_preparation;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<raw forward.fastq> & <raw reverse.fastq>: RAN-seqのraw fastqデータになります。gzipは受け入れていません。
+<sample name>: サンプル名です。ユニークな文字列であれば何度もよいですが、基本的にはSRAのRun IDを入力することを推奨します。
+<output directory name>: 出力ディレクトリ名です。preparation.shで入力したものと同一である必要があります。
+```
+
 ## 開発工程におけるgithubの扱い方
 
 まず最初はリポジストリをクローンしてもらいます。それ以降は鈴木さんはmainからtestブランチを作成して、testブランチへプッシュを行うようにしましょう。
