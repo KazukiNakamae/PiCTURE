@@ -22,7 +22,8 @@ PiCTUREパイプラインは出力ディレクトリ内で処理が完結する�
 次のコマンドを実行して出力ディレクトリとDockerイメージの作成を行なってください。
 
 ```
-preparation.sh　<output directory name>
+chmod +x preparation.sh;
+sudo preparation.sh　<output directory name>;
 ```
 
 次にまた[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)からhg38用のダウンロードページに入り、以下のファイルをダウンロードしてください。
@@ -51,7 +52,8 @@ cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta <output directory name>
 各サンプルごとに次のコマンドを実行してバリアントコールまでを実施してください。
 
 ```
-run.sh　\
+chmod +x run.sh;
+sudo run.sh　\
 <raw forward.fastq> \
 <raw reverse.fastq> \
 <sample name> \
