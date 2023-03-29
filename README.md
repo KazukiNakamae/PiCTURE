@@ -1,5 +1,5 @@
 # PiCTURE
-Pipeline for CRISPR-induced Transcriptome Unintended RNA Editing Analysis
+**Pi**peline for **C**RISPR-induced **T**ranscriptome-wide **U**nintended **R**NA **E**diting
 
 ## Run PiCTURE with Docker
 
@@ -27,11 +27,12 @@ sudo preparation.sh　<output directory name>;
 ```
 
 次にまた[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)からhg38用のダウンロードページに入り、以下のファイルをダウンロードしてください。
-- resources-broad-hg38-v0-Homo_sapiens_assembly38.dict 
-- resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta
-- resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai
-- resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf
-- resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf.idx
+- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.dict 
+- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.fasta
+- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai
+- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf
+- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf.idx
+(...) might disappear in a local environment.
 
 ダウンロードしたファイルを下記のコマンドにしたがって出力ディレクトリ内に配置してください。
 ```

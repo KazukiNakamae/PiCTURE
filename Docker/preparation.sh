@@ -1,3 +1,4 @@
+#!/bin/bash
 output=$1
 
 echo "Check files"
@@ -20,9 +21,12 @@ echo "Download Docker images"
 docker pull clinicalgenomics/trim_galore:0.6.7;
 docker pull broadinstitute/gatk:4.3.0.0;
 
-echo "Create STAR index in docker image"
-docker build -t kazukinakamae/star_for_human_gatk:1.0 .;
-
+if [[ "$(docker images -q kazukinakamae/star_for_human_gatk:1.0 2> /dev/null)" == "" ]]; then
+     echo "Create STAR index in docker image"
+     docker build -t kazukinakamae/star_for_human_gatk:1.0 .;
+else
+     echo "The docker image already existed."
+fi
 
 cat << EOT >> ${output}/4_bam_preparation/bam_preparation_v2.sh
 # bam_preparation.sh <reference.fa> <mapped.bam> <readname> <platform> <output.bam>

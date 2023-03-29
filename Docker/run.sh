@@ -1,3 +1,4 @@
+#!/bin/bash
 input_fore=$1
 input_rev=$2
 input_name=$3
@@ -13,15 +14,15 @@ cd $output;
 ### Copy rawdata
 
 echo "Copy raw fastq data"
-if [[ ${input_fore} == *.fq ]]; then
-      cp ${input_fore} ${output}/0_rawdata/${input_name}_F.fastq;
-      cp ${input_rev} ${output}/0_rawdata/${input_name}_R.fastq;
-elif [[ ${input_fore} == *.FASTQ ]]; then
-      cp ${input_fore} ${output}/0_rawdata/${input_name}_F.fastq;
-      cp ${input_rev} ${output}/0_rawdata/${input_name}_R.fastq;
-elif [[ ${input_fore} == *.fastq ]]; then
-      cp ${input_fore} ${output}/0_rawdata/${input_name}_F.fastq;
-      cp ${input_rev} ${output}/0_rawdata/${input_name}_R.fastq;
+if [[ ../${input_fore} == *.fq ]]; then
+      cp ../${input_fore} 0_rawdata/${input_name}_F.fastq;
+      cp ../${input_rev} 0_rawdata/${input_name}_R.fastq;
+elif [[ ../${input_fore} == *.FASTQ ]]; then
+      cp ../${input_fore} 0_rawdata/${input_name}_F.fastq;
+      cp ../${input_rev} 0_rawdata/${input_name}_R.fastq;
+elif [[ ../${input_fore} == *.fastq ]]; then
+      cp ../${input_fore} 0_rawdata/${input_name}_F.fastq;
+      cp ../${input_rev} 0_rawdata/${input_name}_R.fastq;
 else
       echo "Input files must be .fastq format."
       exit 1;
@@ -121,7 +122,7 @@ docker run \
      --name nakamae_bsqr --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
      gatk ApplyBQSR \
      -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
-     -I 5_recal_data/${input_name}.complete.bam \
+     -I 4_bam_preparation/${input_name}.complete.bam \
      --bqsr-recal-file 5_recal_data/${input_name}_dbsnp_only_recal_data.table \
      -O 5_recal_data/${input_name}.dbsnp_only.BQSR.bam;
 docker logs -f nakamae_bsqr &> 5_recal_data/${input_name}.dbsnp_only.BQSR.log;
@@ -176,5 +177,5 @@ else
     echo "Choose genotyping method: single or joint."
     echo "Aborts..."
     exit 1;
-
+fi
 
