@@ -26,31 +26,11 @@ chmod +x preparation.sh;
 sudo preparation.sh　<output directory name>;
 ```
 
-次にまた[GATK resource bundle](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)からhg38用のダウンロードページに入り、以下のファイルをダウンロードしてください。
-- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.dict 
-- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.fasta
-- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai
-- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf
-- (resources-)broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf.idx
-(...) might disappear in a local environment.
-
-ダウンロードしたファイルを下記のコマンドにしたがって出力ディレクトリ内に配置してください。
-```
-cp resources-broad-hg38-v0-Homo_sapiens_assembly38.dict <output directory name>/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.dict;
-cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta <output directory name>/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta;
-cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai <output directory name>/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai;
-cp resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf;
-cp resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf.idx <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.dbsnp138.vcf.idx;
-cp resources-broad-hg38-v0-Homo_sapiens_assembly38.dict <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.dict;
-cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai;
-cp resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta <output directory name>/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta;
-```
-
 完了です。この出力ファイルはサンプルごとに何度も作る必要はなく、一度作ってしまえばあとは下記のrun.shで使いまわせます。
 
-### Run PiCTURE pipeline using run.sh
+### Run PiCTURE pipeline
 
-各サンプルごとに次のコマンドを実行してバリアントコールまでを実施してください。
+各サンプルごとに次のコマンドを実行してBQSRまでを実施してください。
 
 ```
 chmod +x run.sh;
@@ -69,7 +49,60 @@ joint_preparation;
 <output directory name>: 出力ディレクトリ名です。preparation.shで入力したものと同一である必要があります。
 ```
 
-完了すると、出力ディレクトリ内に各ステップの処理結果が出力されます。
+#### 単一のRNA-seqデータを取得する場合
+
+バリアントコールして、単一のRNA-seqデータからvcfファイルを生成します。
+
+```
+chmod +x variant_identification_from_singledb.sh;
+sudo variant_identification_from_singledb.sh　\
+<sample name> \
+<output directory name>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<sample name>: サンプル名です。run.shと同じものを入力してください。
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+```
+
+完了したら次のコマンドを実行して、SNP検出とモチーフ抽出を行います。
+
+```
+chmod +x motif_estimation.sh;
+sudo motif_estimation.sh　\
+<sample name> \
+<output directory name> \
+<VAF threshold>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<sample name>: サンプル名です。run.shと同じものを入力してください。
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+<VAF threshold>: VAFを分類するときの閾値です。0.0-1.0までの数値を入力してください。
+```
+
+様々な閾値を試したい場合は、上記の閾値を変更して処理してください。閾値ごとに別々に出力ディレクトリを作成する必要はありません。
+
+完了したら次のコマンドを実行して、結果ファイルをtar.gz形式にパッケージングします。
+
+```
+chmod +x get_result_from_singledb.sh;
+sudo get_result_from_singledb.sh　\
+<sample name> \
+<output directory name> \
+<result_name>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<sample name>: サンプル名です。run.shと同じものを入力してください。
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+<result_name>: パッケージされたtar.gzデータの名前です。`<output directory name> /report`上に`<result_name>.tar.gz`というファイルが作成されます。
+```
+
+tar.gzファイルにはサンプル名を含む各閾値ごとのデータを全て含みます。
 
 ## 開発工程におけるgithubの扱い方
 
