@@ -182,7 +182,7 @@ fi
 echo "Done"
 
 # Export Summary
-[ -d 13_vaf_calculation/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed ] \
+[ ! -d 13_vaf_calculation/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed ] \
 && mkdir 13_vaf_calculation/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed \
 && echo "Create 13_vaf_calculation/"${input_name}".hg38.identified.snp.fltr.vaf.headerfixed";
 if [[ ! -f 13_vaf_calculation/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed/stats ]]; then
@@ -242,7 +242,7 @@ echo "Done"
 
 
 # Export Summary
-[ -d 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf ] \
+[ ! -d 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf ] \
 && mkdir 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf \
 && echo "14_vaf_classification/"${input_name}".hg38.identified.snp.fltr.vaf.headerfixed."${vaf_threshold}"_1.0vaf";
 if [[ ! -f 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf/stats ]]; then
@@ -281,7 +281,7 @@ fi
 echo "Done"
 
 
-[ -d ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf ] \
+[ ! -d ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf ] \
 && mkdir ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf \
 && echo "Create "${input_name}".hg38.identified.snp.fltr.vaf.headerfixed."${vaf_threshold}"_1.0vaf";
 echo "Extract flanking sequences around SNPs with VAF>="${vaf_threshold}"..."
@@ -343,7 +343,7 @@ if [ ${vaf_threshold} -ne 0 ]; then
      echo "Done"
 
      # Export Summary
-     [ -d 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf ] \
+     [ ! -d 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf ] \
      && mkdir 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf \
      && echo "14_vaf_classification/"${input_name}".hg38.identified.snp.fltr.vaf.headerfixed.0.0_"${vaf_threshold}"vaf";
      if [[ ! -f 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf/stats ]]; then
@@ -381,7 +381,7 @@ if [ ${vaf_threshold} -ne 0 ]; then
      fi
      echo "Done"
 
-     [ -d ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf ] \
+     [ ! -d ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf ] \
      && mkdir ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf \
      && echo "Create "${input_name}".hg38.identified.snp.fltr.vaf.headerfixed.0.0_"${vaf_threshold}"vaf";
      echo "Extract flanking sequences around SNPs with VAF<"${vaf_threshold}"..."
