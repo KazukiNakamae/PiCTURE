@@ -23,7 +23,7 @@ PiCTUREパイプラインは出力ディレクトリ内で処理が完結する�
 
 ```
 chmod +x preparation.sh;
-sudo preparation.sh　<output directory name>;
+sudo bash preparation.sh　<output directory name>;
 ```
 
 完了です。この出力ファイルはサンプルごとに何度も作る必要はなく、一度作ってしまえばあとは下記のrun.shで使いまわせます。
@@ -34,7 +34,7 @@ sudo preparation.sh　<output directory name>;
 
 ```
 chmod +x run.sh;
-sudo run.sh　\
+sudo bash run.sh　\
 <raw forward.fastq> \
 <raw reverse.fastq> \
 <sample name> \
@@ -55,7 +55,7 @@ joint_preparation;
 
 ```
 chmod +x variant_identification_from_singledb.sh;
-sudo variant_identification_from_singledb.sh　\
+sudo bash variant_identification_from_singledb.sh　\
 <sample name> \
 <output directory name>;
 ```
@@ -70,7 +70,7 @@ sudo variant_identification_from_singledb.sh　\
 
 ```
 chmod +x motif_estimation.sh;
-sudo motif_estimation.sh　\
+sudo bash motif_estimation.sh　\
 <sample name> \
 <output directory name> \
 <VAF threshold>;
@@ -89,7 +89,7 @@ sudo motif_estimation.sh　\
 
 ```
 chmod +x get_result_from_singledb.sh;
-sudo get_result_from_singledb.sh　\
+sudo bash get_result_from_singledb.sh　\
 <sample name> \
 <output directory name> \
 <result_name>;
