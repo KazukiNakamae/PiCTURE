@@ -8,7 +8,7 @@ if [[ ! -e $output ]]; then
       exit 1;
 fi
 cd $output;
-[ -d report ] && mkdir report && echo "Create report"};
+[ ! -d report ] && mkdir report && echo "Create report"};
 
 mkdir ${result_name};
 # All
