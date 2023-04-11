@@ -74,7 +74,7 @@ if [[ ! -f 10_snp_hard_filter/${input_name}.hg38.identified.snp.fltr.vcf ]]; the
 fi
 echo "Done"
 
-if [[ ! -f 11_snp_classification/${input_name}.hg38.identified.snp.fltr ]]; then
+if [[ ! -f 11_snp_classification/${input_name}.hg38.identified.snp.fltr.all.fa ]]; then
      echo "SNP classification..."
      docker run \
           -u "$(id -u $USER):$(id -g $USER)" \
@@ -87,7 +87,7 @@ if [[ ! -f 11_snp_classification/${input_name}.hg38.identified.snp.fltr ]]; then
           -o 11_snp_classification/${input_name}.hg38.identified.snp.fltr;
 fi
 
-if [[ ! -f 11_snp_classification/${input_name}.hg38.identified.snp.fltr ]]; then
+if [[ ! -f 11_snp_classification/${input_name}.hg38.identified.snp.fltr.all.fa ]]; then
     echo "Error."
     exit 1;
 fi
