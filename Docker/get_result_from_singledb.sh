@@ -10,9 +10,8 @@ fi
 cd $output;
 [ ! -d report ] && mkdir report && echo "Create report"};
 
-mkdir ${result_name};
-# All
 mkdir report/${result_name};
+# All
 mkdir report/${result_name}/all;
 mkdir report/${result_name}/all/vcf;
 cp 10_snp_hard_filter/${input_name}.hg38.identified.snp.fltr.vcf report/${result_name}/all/vcf;
