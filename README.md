@@ -49,7 +49,7 @@ joint_preparation;
 <output directory name>: 出力ディレクトリ名です。preparation.shで入力したものと同一である必要があります。
 ```
 
-#### 単一のRNA-seqデータを取得する場合
+#### PipelineA: 単一のRNA-seqデータを取得する場合
 
 バリアントコールして、単一のRNA-seqデータからvcfファイルを生成します。
 
@@ -88,8 +88,8 @@ sudo bash motif_estimation.sh　\
 完了したら次のコマンドを実行して、結果ファイルをtar.gz形式にパッケージングします。
 
 ```
-chmod +x get_result_from_singledb.sh;
-sudo bash get_result_from_singledb.sh　\
+chmod +x get_result.sh;
+sudo bash get_result.sh　\
 <sample name> \
 <output directory name> \
 <result_name>;
@@ -104,7 +104,7 @@ sudo bash get_result_from_singledb.sh　\
 
 tar.gzファイルにはサンプル名を含む各閾値ごとのデータを全て含みます。
 
-#### 複数のRNA-seqデータを取得する場合
+#### PipelineB: 複数のRNA-seqデータを取得する場合
 
 複数のバリアントコールして、それらRNA-seqデータからvcfファイルを生成します。
 
@@ -149,8 +149,8 @@ sudo bash motif_estimation.sh　\
 完了したら次のコマンドを実行して、結果ファイルをtar.gz形式にパッケージングします。
 
 ```
-chmod +x get_result_from_singledb.sh;
-sudo bash get_result_from_singledb.sh　\
+chmod +x get_result.sh;
+sudo bash get_result.sh　\
 <group name> \
 <output directory name> \
 <result_name>;
@@ -159,6 +159,68 @@ sudo bash get_result_from_singledb.sh　\
 それぞれの引数の説明はこちらになります。
 ```
 <group name>: 解析グループ名です。variant_identification_from_multidb.shと同じものを入力してください。
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+<result_name>: パッケージされたtar.gzデータの名前です。`<output directory name> /report`上に`<result_name>.tar.gz`というファイルが作成されます。
+```
+
+tar.gzファイルにはサンプル名を含む各閾値ごとのデータを全て含みます。
+
+#### PipelineC: 異なるデータの共通のバリアントデータから取得する場合
+
+こちらはPipelineAまたはPipelineBで2つ以上のデータを事前に出力済みである必要があります。
+複数のvcfファイルから共通の変異を抽出します。
+
+```
+chmod +x get_intersection_variants.sh;
+get_intersection_variants.sh　\
+<output directory name> \
+<set name>
+<sample name or group name 1> \
+<sample name or group name 2> \
+<sample name or group name 3> \
+...
+<sample name or group name n>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+<set name>: 共通変異セットの名前です。<sample name><group name>とは異なる重複のない任意の名前を指定してください。
+<sample name or group name n>: 解析対象とするサンプル名あるいはグループ名です。対象とできる数は無制限となっています。
+```
+
+完了したら次のコマンドを実行して、SNP検出とモチーフ抽出を行います。
+
+```
+chmod +x motif_estimation.sh;
+sudo bash motif_estimation.sh　\
+<set name> \
+<output directory name> \
+<VAF threshold>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<set name>: 共通変異セットの名前です。get_intersection_variants.shと同じものを入力してください。
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+<VAF threshold>: VAFを分類するときの閾値です。0.0-1.0までの数値を入力してください。
+```
+
+様々な閾値を試したい場合は、上記の閾値を変更して処理してください。閾値ごとに別々に出力ディレクトリを作成する必要はありません。
+
+完了したら次のコマンドを実行して、結果ファイルをtar.gz形式にパッケージングします。
+
+```
+chmod +x get_result.sh;
+sudo bash get_result.sh　\
+<set name> \
+<output directory name> \
+<result_name>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<set name>: 共通変異セットの名前です。get_intersection_variants.shと同じものを入力してください。
 <output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
 <result_name>: パッケージされたtar.gzデータの名前です。`<output directory name> /report`上に`<result_name>.tar.gz`というファイルが作成されます。
 ```
