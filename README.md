@@ -104,6 +104,67 @@ sudo bash get_result_from_singledb.sh　\
 
 tar.gzファイルにはサンプル名を含む各閾値ごとのデータを全て含みます。
 
+#### 複数のRNA-seqデータを取得する場合
+
+複数のバリアントコールして、それらRNA-seqデータからvcfファイルを生成します。
+
+```
+chmod +x variant_identification_from_multidb.sh;
+variant_identification_from_multidb.sh　\
+<output directory name> \
+<group name>
+<sample name 1> \
+<sample name 2> \
+<sample name 3> \
+...
+<sample name n>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+<group name>: 解析グループ名です。重複のない任意の名前を指定してください。
+<sample name n>: 解析対象とするサンプル名です。run.shと同じものを入力してください。対象とできるサンプル数は無制限となっています。
+```
+
+完了したら次のコマンドを実行して、SNP検出とモチーフ抽出を行います。
+
+```
+chmod +x motif_estimation.sh;
+sudo bash motif_estimation.sh　\
+<group name> \
+<output directory name> \
+<VAF threshold>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<group name>: 解析グループ名です。variant_identification_from_multidb.shと同じものを入力してください。
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+<VAF threshold>: VAFを分類するときの閾値です。0.0-1.0までの数値を入力してください。
+```
+
+様々な閾値を試したい場合は、上記の閾値を変更して処理してください。閾値ごとに別々に出力ディレクトリを作成する必要はありません。
+
+完了したら次のコマンドを実行して、結果ファイルをtar.gz形式にパッケージングします。
+
+```
+chmod +x get_result_from_singledb.sh;
+sudo bash get_result_from_singledb.sh　\
+<group name> \
+<output directory name> \
+<result_name>;
+```
+
+それぞれの引数の説明はこちらになります。
+```
+<group name>: 解析グループ名です。variant_identification_from_multidb.shと同じものを入力してください。
+<output directory name>: 出力ディレクトリ名です。run.shと同じものを入力してください。
+<result_name>: パッケージされたtar.gzデータの名前です。`<output directory name> /report`上に`<result_name>.tar.gz`というファイルが作成されます。
+```
+
+tar.gzファイルにはサンプル名を含む各閾値ごとのデータを全て含みます。
+
 ## 開発工程におけるgithubの扱い方
 
 まず最初はリポジストリをクローンしてもらいます。それ以降は鈴木さんはmainからtestブランチを作成して、testブランチへプッシュを行うようにしましょう。
