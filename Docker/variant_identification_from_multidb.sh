@@ -32,7 +32,7 @@ for i in "${!input_name_arr[@]}"; do
         -I 5_recal_data/${input_name_arr[$i]}.dbsnp_only.BQSR.bam \
         -O 6_haplotypecaller/${group_name}_${i}.hg38.vcf.gz \
         -ERC GVCF --tmp-dir 6_haplotypecaller/tmp \
-        --sample-name ${group_name}_${i};
+        --sample-name ${input_name_arr[$i]};
     rm -rf 6_haplotypecaller/tmp;
   fi
   if [[ ! -f 6_haplotypecaller/${group_name}_${i}.hg38.vcf.gz ]]; then
