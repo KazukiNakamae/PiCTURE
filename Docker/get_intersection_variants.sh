@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ ${#args[@]} -lt 4 ]; then
+if [ $# -lt 4 ]; then
      echo "3 arguments are required.";
      exit 1;
 fi
