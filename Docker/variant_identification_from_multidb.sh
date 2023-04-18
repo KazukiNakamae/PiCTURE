@@ -61,7 +61,7 @@ if [[ ! -f joint_db/gvcfs_joint_db_${group_name}/vidmap.json ]]; then
 fi
 
 # バリアント判定
-if [[ ! -f 8_vcf_identification/${group_name}.hg38.identified.vcf; ]]; then
+if [[ ! -f 8_vcf_identification/${group_name}.hg38.identified.vcf ]]; then
   docker run \
       -u "$(id -u $USER):$(id -g $USER)" \
       -v /etc/passwd:/etc/passwd:ro \
@@ -72,7 +72,7 @@ if [[ ! -f 8_vcf_identification/${group_name}.hg38.identified.vcf; ]]; then
       -O 8_vcf_identification/${group_name}.hg38.identified.vcf;
 fi
 
-if [[ ! -f 8_vcf_identification/${group_name}.hg38.identified.vcf; ]]; then
+if [[ ! -f 8_vcf_identification/${group_name}.hg38.identified.vcf ]]; then
     echo "Error."
     exit 1;
 fi

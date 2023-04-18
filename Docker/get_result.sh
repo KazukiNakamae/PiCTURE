@@ -15,8 +15,11 @@ mkdir report/${result_name};
 mkdir report/${result_name}/all;
 mkdir report/${result_name}/all/vcf;
 cp 10_snp_hard_filter/${input_name}.hg38.identified.snp.fltr.vcf report/${result_name}/all/vcf;
-cp -r 11_snp_classification report/${result_name}/all/sequence;
-cp -r 12_motif_extraction report/${result_name}/all/motif;
+mkdir report/${result_name}/all/sequence;
+cp 11_snp_classification/${input_name}*.fa report/${result_name}/all/sequence;
+mkdir report/${result_name}/all/motif;
+cp 12_motif_extraction/${input_name}*.png report/${result_name}/all/motif;
+cp 12_motif_extraction/${input_name}*.txt report/${result_name}/all/motif;
 cp 13_vaf_calculation/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed/stats report/${result_name}/all/summary.txt;
 cp -r 13_vaf_calculation/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed/multiqc_data report/${result_name}/all/figure;
 # Each

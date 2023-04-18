@@ -10,11 +10,11 @@ fi
 cd $output;
 
 
-if [ ${vaf_threshold} -gt 1.000 ]; then
+if (( $(echo "${vaf_threshold} > 1.000" | bc -l) )); then
      echo "VAF threshold should be 0.0-1.0.";
      exit 1;
 fi
-if [ ${vaf_threshold} -lt 0.000 ]; then
+if (( $(echo "${vaf_threshold} < 0.000" | bc -l) )); then
      echo "VAF threshold should be 0.0-1.0.";
      exit 1;
 fi
@@ -322,7 +322,7 @@ done
 echo "Done"
 
 # When VAF threshold is 0, the blow process is slipped, because the processed data must be empty.
-if [ ${vaf_threshold} -ne 0 ]; then
+if (( $(echo "${vaf_threshold} > 0" | bc -l) )); then
      # Extract SNP with VAF<${vaf_threshold}
      if [[ ! -f 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf.vcf ]]; then
           docker run \
