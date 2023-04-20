@@ -24,20 +24,21 @@ cp 13_vaf_calculation/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed/sta
 cp -r 13_vaf_calculation/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed/multiqc_data report/${result_name}/all/figure;
 # Each
 mkdir report/${result_name}/each;
-for condition in `ls ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.*vaf`
+for condition in `echo ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.*vaf`
   do
   mkdir report/${result_name}/each/${condition};
   mkdir report/${result_name}/each/${condition}/vcf;
-  cp 14_vaf_classification/${condition}.vcf report/${result_name}/each/condition/vcf/;
+  cp 14_vaf_classification/${condition}.vcf report/${result_name}/each/${condition}/vcf/;
   mkdir report/${result_name}/each/${condition}/sequence;
-  cp ${condition}/*.fa report/${result_name}/each/sequence/;
+  cp ${condition}/*.fa report/${result_name}/each/${condition}/sequence/;
   mkdir report/${result_name}/each/${condition}/motif;
-  cp ${condition}/*.png report/${result_name}/each/motif/;
-  cp ${condition}/*.txt report/${result_name}/each/motif/;
+  cp ${condition}/*.png report/${result_name}/each/${condition}/motif/;
+  cp ${condition}/*.txt report/${result_name}/each/${condition}/motif/;
   cp 14_vaf_classification/${condition}/stats report/${result_name}/each/summary.txt;
-  cp -r 14_vaf_classification/${condition}/multiqc_data report/${result_name}/each/figure;
+  cp -r 14_vaf_classification/${condition}/multiqc_data report/${result_name}/each/${condition}/figure;
 done
-tar -zcvf report/${result_name}.tar.gz report/${result_name};
-rm -rf report/${result_name};
+cd report;
+tar -zcvf ${result_name}.tar.gz ${result_name};
+rm -rf ${result_name};
 
 exit 0;

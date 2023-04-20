@@ -74,6 +74,12 @@ if [[ ! -f 10_snp_hard_filter/${input_name}.hg38.identified.snp.fltr.vcf ]]; the
 fi
 echo "Done"
 
+
+if [ $(grep -v "#" 10_snp_hard_filter/${input_name}.hg38.identified.snp.fltr.vcf | wc -l) -eq 0 ]; then
+     echo "There is no valid SNV in "${input_name};
+     exit 0;
+fi
+
 if [[ ! -f 11_snp_classification/${input_name}.hg38.identified.snp.fltr.all.fa ]]; then
      echo "SNP classification..."
      docker run \
