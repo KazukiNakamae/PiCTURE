@@ -36,7 +36,7 @@ sudo bash run.sh　\
 <raw reverse.fastq> \
 <sample name> \
 <output directory name> \
-joint_preparation;
+<memory>;
 ```
 
 それぞれの引数の説明はこちらになります。
@@ -44,6 +44,7 @@ joint_preparation;
 <raw forward.fastq> & <raw reverse.fastq>: RAN-seqのraw fastqデータのパスを入力します。gzipファイルは受け付けていません。
 <sample name>: サンプル名です。ユニークな文字列であれば何度もよいですが、基本的にはSRAのRun IDを入力することを推奨します。
 <output directory name>: 出力ディレクトリ名です。preparation.shで入力したものと同一である必要があります。
+<memory>： 使用するメモリ指定です。
 ```
 
 #### PipelineA: 単一のRNA-seqデータを取得する場合
@@ -107,7 +108,7 @@ tar.gzファイルにはサンプル名を含む各閾値ごとのデータを�
 
 ```
 chmod +x variant_identification_from_multidb.sh;
-variant_identification_from_multidb.sh　\
+sudo bash variant_identification_from_multidb.sh　\
 <output directory name> \
 <group name>
 <sample name 1> \
@@ -169,7 +170,7 @@ tar.gzファイルにはサンプル名を含む各閾値ごとのデータを�
 
 ```
 chmod +x get_intersection_variants.sh;
-get_intersection_variants.sh　\
+sudo bash get_intersection_variants.sh　\
 <output directory name> \
 <set name>
 <sample name or group name 1> \

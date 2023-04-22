@@ -21,7 +21,7 @@ cd $output;
 # variant call
 for i in "${!input_name_arr[@]}"; do 
   if [[ ! -f 6_haplotypecaller/${group_name}_${i}.hg38.vcf.gz ]]; then
-    mkdir 6_haplotypecaller/tmp;
+    mkdir 6_haplotypecaller/tmp_${input_name_arr[$i]};
     docker run \
         -u "$(id -u $USER):$(id -g $USER)" \
         -v /etc/passwd:/etc/passwd:ro \
@@ -31,9 +31,9 @@ for i in "${!input_name_arr[@]}"; do
         -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
         -I 5_recal_data/${input_name_arr[$i]}.dbsnp_only.BQSR.bam \
         -O 6_haplotypecaller/${group_name}_${i}.hg38.vcf.gz \
-        -ERC GVCF --tmp-dir 6_haplotypecaller/tmp \
+        -ERC GVCF --tmp-dir 6_haplotypecaller/tmp_${input_name_arr[$i]} \
         --sample-name ${input_name_arr[$i]};
-    rm -rf 6_haplotypecaller/tmp;
+    rm -rf 6_haplotypecaller/tmp_${input_name_arr[$i]};
   fi
   if [[ ! -f 6_haplotypecaller/${group_name}_${i}.hg38.vcf.gz ]]; then
     echo "Error."

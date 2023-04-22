@@ -10,19 +10,19 @@ cd $output;
 
 # variant call
 if [[ ! -f 6_haplotypecaller/${input_name}.hg38.vcf.gz ]]; then
-  mkdir 6_haplotypecaller/tmp;
+  mkdir 6_haplotypecaller/tmp_${input_name};
   docker run \
       -u "$(id -u $USER):$(id -g $USER)" \
       -v /etc/passwd:/etc/passwd:ro \
       -v /etc/group:/etc/group:ro \
-      --name nakamae_haplotypecaller --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+      --memory 30g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
       gatk HaplotypeCaller \
       -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
       -I 5_recal_data/${input_name}.dbsnp_only.BQSR.bam \
       -O 6_haplotypecaller/${input_name}.hg38.vcf.gz \
-      -ERC GVCF --tmp-dir 6_haplotypecaller/tmp \
+      -ERC GVCF --tmp-dir 6_haplotypecaller/tmp_${input_name} \
       --sample-name ${input_name};
-  rm -rf 6_haplotypecaller/tmp;
+  rm -rf 6_haplotypecaller/tmp_${input_name};
 fi
 
 if [[ ! -f 6_haplotypecaller/${input_name}.hg38.vcf.gz ]]; then
@@ -36,7 +36,7 @@ if [[ ! -f single_db/gvcfs_single_db_${input_name}/vidmap.json ]]; then
       -u "$(id -u $USER):$(id -g $USER)" \
       -v /etc/passwd:/etc/passwd:ro \
       -v /etc/group:/etc/group:ro \
-      --name nakamae_genomicsdbimport --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+      --memory 30g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
       gatk GenomicsDBImport -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
       -V 6_haplotypecaller/${input_name}.hg38.vcf.gz \
       -L 7a_single_genomics_dbImport/resources_broad_hg38_v0_wgs_calling_regions.hg38.interval_list \
@@ -54,7 +54,7 @@ if [[ ! -f 8_vcf_identification/${input_name}.hg38.identified.vcf ]]; then
       -u "$(id -u $USER):$(id -g $USER)" \
       -v /etc/passwd:/etc/passwd:ro \
       -v /etc/group:/etc/group:ro \
-      --name nakamae_genotypegvcfs --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+      --memory 30g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
       gatk GenotypeGVCFs -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
       -V gendb://single_db/gvcfs_single_db_${input_name} \
       -O 8_vcf_identification/${input_name}.hg38.identified.vcf;
