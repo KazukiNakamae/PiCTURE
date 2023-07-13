@@ -103,6 +103,11 @@ if [[ ! -f 4_bam_preparation/${input_name}.complete.bam ]]; then
         ${memory};
     cd ..
     rm 4_bam_preparation/${input_name}.original.bam;
+    rm 4_bam_preparation/${input_name}.original.bai;
+    rm 4_bam_preparation/${input_name}.original.bam.addRG.bam;
+    rm 4_bam_preparation/${input_name}.original.bam.addRG.bai;
+    rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bam;
+    rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bai;
 fi
 
 if [[ ! -f 4_bam_preparation/${input_name}.complete.bam ]]; then
@@ -116,7 +121,7 @@ if [[ ! -f 5_recal_data/${input_name}_dbsnp_only_recal_data.table ]]; then
         -u "$(id -u $USER):$(id -g $USER)" \
         -v /etc/passwd:/etc/passwd:ro \
         -v /etc/group:/etc/group:ro \
-        --name nakamae_baserecalibrator --memory ${memory}g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+        --memory ${memory}g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
         gatk BaseRecalibrator \
         -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
         -I 4_bam_preparation/${input_name}.complete.bam \
@@ -135,7 +140,7 @@ if [[ ! -f 5_recal_data/${input_name}.dbsnp_only.BQSR.bam ]]; then
         -u "$(id -u $USER):$(id -g $USER)" \
         -v /etc/passwd:/etc/passwd:ro \
         -v /etc/group:/etc/group:ro \
-        --name nakamae_bsqr --memory ${memory}g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+        --memory ${memory}g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
         gatk ApplyBQSR \
         -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
         -I 4_bam_preparation/${input_name}.complete.bam \
@@ -154,7 +159,7 @@ if [[ ! -f 5_recal_data/${input_name}_dbsnp_only_post_recal_data.table ]]; then
         -u "$(id -u $USER):$(id -g $USER)" \
         -v /etc/passwd:/etc/passwd:ro \
         -v /etc/group:/etc/group:ro \
-        --name nakamae_post_baserecalibrator --memory ${memory}g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+        --memory ${memory}g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
         gatk BaseRecalibrator \
         -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
         -I 5_recal_data/${input_name}.dbsnp_only.BQSR.bam \
@@ -173,7 +178,7 @@ if [[ ! -f 5_recal_data/${input_name}_recalibration_dbsnp_only_plots.csv ]]; the
         -u "$(id -u $USER):$(id -g $USER)" \
         -v /etc/passwd:/etc/passwd:ro \
         -v /etc/group:/etc/group:ro \
-        --name nakamae_analysecov --memory ${memory}g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+        --memory ${memory}g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
         gatk AnalyzeCovariates \
         -before 5_recal_data/${input_name}_dbsnp_only_recal_data.table \
         -after 5_recal_data/${input_name}_dbsnp_only_post_recal_data.table \

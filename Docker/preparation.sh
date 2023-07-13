@@ -118,7 +118,7 @@ docker run \
      -u "\$(id -u \$USER):\$(id -g \$USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --name add_rg --memory "\$6"g -itv \$PWD:/data -w /data --rm biocontainers/picard:2.3.0 \
+     --memory "\$6"g -itv \$PWD:/data -w /data --rm biocontainers/picard:2.3.0 \
      picard AddOrReplaceReadGroups \
      INPUT="\$2" \
      OUTPUT="\$2".addRG.bam \
@@ -134,7 +134,8 @@ echo "Mark duplication..."
 docker run \
      -u "\$(id -u \$USER):\$(id -g \$USER)" \
      -v /etc/passwd:/etc/passwd:ro \
-     -v /etc/group:/etc/group:ro \--name mark_dup --memory "\$6"g -itv \$PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+     -v /etc/group:/etc/group:ro \
+     --memory "\$6"g -itv \$PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
      gatk MarkDuplicatesSpark \
      -I "\$2".addRG.bam \
      -O "\$2".addRG.duprm.bam \
@@ -146,7 +147,7 @@ docker run \
      -u "\$(id -u \$USER):\$(id -g \$USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --name mark_dup --memory "\$6"g -itv \$PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+     --memory "\$6"g -itv \$PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
      gatk SplitNCigarReads \
      -R \$1 \
      -I "\$2".addRG.duprm.bam \
