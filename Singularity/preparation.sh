@@ -30,9 +30,12 @@ if [ ! -f ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_ass
      mv Homo_sapiens_assembly38.dict ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.dict && \
      echo "Locate "${output}"/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.dict";
 fi
-if [ ! -f ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta ]; then
+if [ ! -f ./resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta ]; then
      curl -OL https://storage.googleapis.com/genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.fasta;
-     mv Homo_sapiens_assembly38.fasta ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta && \
+     echo "Locate resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta";
+fi
+if [ ! -f ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta ]; then
+     cp Homo_sapiens_assembly38.fasta ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta && \
      echo "Locate "${output}"/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta";
 fi
 if [ ! -f ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta.fai ]; then
@@ -72,33 +75,36 @@ if [ ! -f ./${output}/7b_joint_genomics_dbImport/resources_broad_hg38_v0_wgs_cal
      echo "Locate "${output}"/7b_joint_genomics_dbImport/resources_broad_hg38_v0_wgs_calling_regions.hg38.interval_list";
 fi
 
-echo "Download Docker images"
-if [[ "$(docker images -q clinicalgenomics/trim_galore:0.6.7 2> /dev/null)" == "" ]]; then
-     docker pull clinicalgenomics/trim_galore:0.6.7;
+echo "Build singularity container"
+if [ ! -f ./trim_galore.sif ]; then
+     singularity build trim_galore.sif docker://clinicalgenomics/trim_galore:0.6.7;
 fi
-if [[ "$(docker images -q docker pull broadinstitute/gatk:4.3.0.0 2> /dev/null)" == "" ]]; then
-     docker pull broadinstitute/gatk:4.3.0.0;
+if [ ! -f ./gatk4.sif ]; then
+     singularity build gatk4.sif broadinstitute/gatk:4.3.0.0;
 fi
-if [[ "$(docker images -q kazukinakamae/motif_extraction:1.0 2> /dev/null)" == "" ]]; then
-     docker pull kazukinakamae/motif_extraction:1.0;
+if [ ! -f ./motif_extraction.sif ]; then
+     singularity build motif_extraction.sif kazukinakamae/motif_extraction:1.0;
 fi
-if [[ "$(docker images -q staphb/bcftools:1.16 2> /dev/null)" == "" ]]; then
-     docker pull staphb/bcftools:1.16;
+if [ ! -f ./bcftools.sif ]; then
+     singularity build bcftools.sif staphb/bcftools:1.16;
 fi
-if [[ "$(docker images -q mgibio/picard-cwl:2.18.1 2> /dev/null)" == "" ]]; then
-     docker pull mgibio/picard-cwl:2.18.1;
+if [ ! -f ./picard_cwl.sif ]; then
+     singularity build picard_cwl.sif mgibio/picard-cwl:2.18.1;
 fi
-if [[ "$(docker images -q ewels/multiqc:v1.14 2> /dev/null)" == "" ]]; then
-     docker pull ewels/multiqc:v1.14;
+if [ ! -f ./multiqc.sif ]; then
+     singularity build multiqc.sif ewels/multiqc:v1.14;
 fi
-if [[ "$(docker images -q kazukinakamae/pysam:0.19.1 2> /dev/null)" == "" ]]; then
-     docker pull kazukinakamae/pysam:0.19.1;
+if [ ! -f ./pysam.sif ]; then
+     singularity build pysam.sif kazukinakamae/pysam:0.19.1;
+fi
+if [ ! -f ./star.sif ]; then
+     singularity build star.sif kazukinakamae/conda_star:2.7.4a;
 fi
 
-echo "Build Docker images for STAR with hg38 index"
-if [[ "$(docker images -q kazukinakamae/star_for_human_gatk:1.0 2> /dev/null)" == "" ]]; then
+echo "Indexing hg38 genome using STAR"
+if [ ! -f ./hg38_index/genomeParameters.txt ]; then
      echo "Create STAR index in docker image"
-     docker build -t kazukinakamae/star_for_human_gatk:1.0 .;
+     singularity exec star.sif STAR --runMode genomeGenerate --genomeDir hg38_index --genomeFastaFiles resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta --limitGenomeGenerateRAM 200000000000
 else
      echo "The docker image already existed."
 fi
@@ -108,11 +114,7 @@ cat << EOT >> ${output}/4_bam_preparation/bam_preparation_v2.sh
 # bam_preparation.sh <reference.fa> <mapped.bam> <readname> <platform> <output.bam> <memory>
 # update read group
 echo "Update Read Group..."
-docker run \
-     -u "\$(id -u \$USER):\$(id -g \$USER)" \
-     -v /etc/passwd:/etc/passwd:ro \
-     -v /etc/group:/etc/group:ro \
-     --memory "\$6"g -itv \$PWD:/data -w /data --rm biocontainers/picard:2.3.0 \
+singularity exec picard_cwl.sif --memory "\$6"g --bind \$PWD:/data -W /data \
      picard AddOrReplaceReadGroups \
      INPUT="\$2" \
      OUTPUT="\$2".addRG.bam \
@@ -125,11 +127,7 @@ docker run \
      CREATE_INDEX=true;
 # mark duplication
 echo "Mark duplication..."
-docker run \
-     -u "\$(id -u \$USER):\$(id -g \$USER)" \
-     -v /etc/passwd:/etc/passwd:ro \
-     -v /etc/group:/etc/group:ro \
-     --memory "\$6"g -itv \$PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+singularity exec gatk4.sif --memory "\$6"g --bind \$PWD:/data -W /data \
      gatk MarkDuplicatesSpark \
      -I "\$2".addRG.bam \
      -O "\$2".addRG.duprm.bam \
@@ -137,11 +135,7 @@ docker run \
 
 # Splits reads that contain Ns in their cigar string
 echo "Split reads that contain Ns in their cigar string..."
-docker run \
-     -u "\$(id -u \$USER):\$(id -g \$USER)" \
-     -v /etc/passwd:/etc/passwd:ro \
-     -v /etc/group:/etc/group:ro \
-     --memory "\$6"g -itv \$PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+singularity exec gatk4.sif --memory "\$6"g --bind \$PWD:/data -W /data \
      gatk SplitNCigarReads \
      -R \$1 \
      -I "\$2".addRG.duprm.bam \
