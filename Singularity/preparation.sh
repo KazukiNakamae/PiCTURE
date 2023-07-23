@@ -101,14 +101,6 @@ if [ ! -f ./star.sif ]; then
      singularity build star.sif kazukinakamae/conda_star:2.7.4a;
 fi
 
-echo "Indexing hg38 genome using STAR"
-if [ ! -f ./hg38_index/genomeParameters.txt ]; then
-     echo "Create STAR index in docker image"
-     singularity exec star.sif STAR --runMode genomeGenerate --genomeDir hg38_index --genomeFastaFiles resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta --limitGenomeGenerateRAM 200000000000
-else
-     echo "The docker image already existed."
-fi
-
 if [ ! -f ${output}/4_bam_preparation/bam_preparation_v2.sh ]; then
 cat << EOT >> ${output}/4_bam_preparation/bam_preparation_v2.sh
 # bam_preparation.sh <reference.fa> <mapped.bam> <readname> <platform> <output.bam> <memory>
