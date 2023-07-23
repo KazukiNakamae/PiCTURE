@@ -30,9 +30,9 @@ if [ ! -f ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_ass
      mv Homo_sapiens_assembly38.dict ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.dict && \
      echo "Locate "${output}"/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.dict";
 fi
-if [ ! -f ./resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta ]; then
+if [ ! -f ./Homo_sapiens_assembly38.fasta ]; then
      curl -OL https://storage.googleapis.com/genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.fasta;
-     echo "Locate resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta";
+     echo "Locate Homo_sapiens_assembly38.fasta";
 fi
 if [ ! -f ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta ]; then
      cp Homo_sapiens_assembly38.fasta ./${output}/4_bam_preparation/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta && \
@@ -80,25 +80,25 @@ if [ ! -f ./trim_galore.sif ]; then
      singularity build trim_galore.sif docker://clinicalgenomics/trim_galore:0.6.7;
 fi
 if [ ! -f ./gatk4.sif ]; then
-     singularity build gatk4.sif broadinstitute/gatk:4.3.0.0;
+     singularity build gatk4.sif docker://broadinstitute/gatk:4.3.0.0;
 fi
 if [ ! -f ./motif_extraction.sif ]; then
-     singularity build motif_extraction.sif kazukinakamae/motif_extraction:1.0;
+     singularity build motif_extraction.sif docker://kazukinakamae/motif_extraction:1.0;
 fi
 if [ ! -f ./bcftools.sif ]; then
-     singularity build bcftools.sif staphb/bcftools:1.16;
+     singularity build bcftools.sif docker://staphb/bcftools:1.16;
 fi
 if [ ! -f ./picard_cwl.sif ]; then
-     singularity build picard_cwl.sif mgibio/picard-cwl:2.18.1;
+     singularity build picard_cwl.sif docker://mgibio/picard-cwl:2.18.1;
 fi
 if [ ! -f ./multiqc.sif ]; then
-     singularity build multiqc.sif ewels/multiqc:v1.14;
+     singularity build multiqc.sif docker://ewels/multiqc:v1.14;
 fi
 if [ ! -f ./pysam.sif ]; then
-     singularity build pysam.sif kazukinakamae/pysam:0.19.1;
+     singularity build pysam.sif docker://kazukinakamae/pysam:0.19.1;
 fi
 if [ ! -f ./star.sif ]; then
-     singularity build star.sif kazukinakamae/conda_star:2.7.4a;
+     singularity build star.sif docker://kazukinakamae/conda_star:2.7.4a;
 fi
 
 if [ ! -f ${output}/4_bam_preparation/bam_preparation_v2.sh ]; then
