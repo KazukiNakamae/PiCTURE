@@ -40,8 +40,6 @@ if [[ ! -f 1_trim_galore/${input_name}_F_val_1.fq ]]; then
         trim_galore \
         -j 14 --fastqc --trim1 \
         --output_dir 1_trim_galore --paired 0_rawdata/${input_name}_F.fastq 0_rawdata/${input_name}_R.fastq;
-    rm 0_rawdata/${input_name}_F.fastq;
-    rm 0_rawdata/${input_name}_R.fastq;
 fi
 
 if [[ ! -f 1_trim_galore/${input_name}_F_val_1.fq ]]; then
@@ -81,8 +79,8 @@ if [[ ! -f 4_bam_preparation/${input_name}.original.bam ]]; then
         --sjdbFileChrStartEnd 2_star/star_${input_name}_SJ.out.tab \
         --readFilesIn 1_trim_galore/${input_name}_F_val_1.fq 1_trim_galore/${input_name}_R_val_2.fq \
         --runThreadN 14 --outSAMtype BAM SortedByCoordinate \
-        --outFileNamePrefix 3_twopass_align/;
-    cp 3_twopass_align/Aligned.sortedByCoord.out.bam 4_bam_preparation/${input_name}.original.bam;
+        --outFileNamePrefix 3_twopass_align/star_${input_name}_;
+    cp 3_twopass_align/star_${input_name}_Aligned.sortedByCoord.out.bam 4_bam_preparation/${input_name}.original.bam;
     rm 1_trim_galore/${input_name}_F_val_1.fq;
     rm 1_trim_galore/${input_name}_R_val_2.fq;
 fi
@@ -102,12 +100,6 @@ if [[ ! -f 4_bam_preparation/${input_name}.complete.bam ]]; then
         ${input_name}.complete.bam \
         ${memory};
     cd ..
-    rm 4_bam_preparation/${input_name}.original.bam;
-    rm 4_bam_preparation/${input_name}.original.bai;
-    rm 4_bam_preparation/${input_name}.original.bam.addRG.bam;
-    rm 4_bam_preparation/${input_name}.original.bam.addRG.bai;
-    rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bam;
-    rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bai;
 fi
 
 if [[ ! -f 4_bam_preparation/${input_name}.complete.bam ]]; then
@@ -190,6 +182,18 @@ if [[ ! -f 5_recal_data/${input_name}_recalibration_dbsnp_only_plots.csv ]]; the
     echo "Error."
     exit 1;
 fi
+
+echo "Clean files..."
+rm 0_rawdata/${input_name}_F.fastq;
+rm 0_rawdata/${input_name}_R.fastq;
+rm 1_trim_galore/${input_name}_F_val_1.fq;
+rm 1_trim_galore/${input_name}_R_val_2.fq;
+rm 4_bam_preparation/${input_name}.original.bam;
+rm 4_bam_preparation/${input_name}.original.bai;
+rm 4_bam_preparation/${input_name}.original.bam.addRG.bam;
+rm 4_bam_preparation/${input_name}.original.bam.addRG.bai;
+rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bam;
+rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bai;
 
 echo "Done."
 exit 0;
