@@ -83,10 +83,13 @@ if [ ! -f ./gatk4.sif ]; then
      singularity build gatk4.sif docker://broadinstitute/gatk:4.3.0.0;
 fi
 if [ ! -f ./motif_extraction.sif ]; then
-     singularity build motif_extraction.sif docker://kazukinakamae/motif_extraction:1.0;
+     singularity build motif_extraction.sif docker://kazukinakamae/motif_extraction:amd64_1.0;
 fi
 if [ ! -f ./bcftools.sif ]; then
      singularity build bcftools.sif docker://staphb/bcftools:1.16;
+fi
+if [ ! -f ./picard.sif ]; then
+     singularity build picard.sif docker://biocontainers/picard:2.3.0;
 fi
 if [ ! -f ./picard_cwl.sif ]; then
      singularity build picard_cwl.sif docker://mgibio/picard-cwl:2.18.1;
@@ -95,44 +98,64 @@ if [ ! -f ./multiqc.sif ]; then
      singularity build multiqc.sif docker://ewels/multiqc:v1.14;
 fi
 if [ ! -f ./pysam.sif ]; then
-     singularity build pysam.sif docker://kazukinakamae/pysam:0.19.1;
+     singularity build pysam.sif docker://kazukinakamae/pysam:amd64_0.19.1;
 fi
 if [ ! -f ./star.sif ]; then
      singularity build star.sif docker://kazukinakamae/conda_star:2.7.4a;
 fi
 
 if [ ! -f ${output}/4_bam_preparation/bam_preparation_v2.sh ]; then
-cat << EOT >> ${output}/4_bam_preparation/bam_preparation_v2.sh
-# bam_preparation.sh <reference.fa> <mapped.bam> <readname> <platform> <output.bam> <memory>
-# update read group
-echo "Update Read Group..."
-singularity exec picard_cwl.sif --memory "\$6"g --bind \$PWD:/data -W /data \
-     picard AddOrReplaceReadGroups \
-     INPUT="\$2" \
-     OUTPUT="\$2".addRG.bam \
-     SO=coordinate \
-     RGID=FLOWCELLID \
-     RGLB="\$3"_library1 \
-     RGPU=unknown \
-     RGPL="\$4" \
-     RGSM="\$3" \
-     CREATE_INDEX=true;
-# mark duplication
-echo "Mark duplication..."
-singularity exec gatk4.sif --memory "\$6"g --bind \$PWD:/data -W /data \
-     gatk MarkDuplicatesSpark \
-     -I "\$2".addRG.bam \
-     -O "\$2".addRG.duprm.bam \
-     -M MarkDuplicatesSpark_output.metrics.txt;
+cat << EOT > ${output}/4_bam_preparation/bam_preparation_v2.sh
+if [[ ! -f "\$2".addRG.bam ]]; then
+	# bam_preparation.sh <reference.fa> <mapped.bam> <readname> <platform> <output.bam>
+	# update read group
+	echo "Update Read Group..."
+	singularity exec --bind \$PWD:/data -W /data ../../picard.sif\
+	     picard AddOrReplaceReadGroups \
+	     INPUT="\$2" \
+	     OUTPUT="\$2".addRG.bam \
+	     SO=coordinate \
+	     RGID=FLOWCELLID \
+	     RGLB="\$3"_library1 \
+	     RGPU=unknown \
+	     RGPL="\$4" \
+	     RGSM="\$3" \
+	     CREATE_INDEX=true;
+	echo "DONE"
+fi
+if [[ ! -f "\$2".addRG.bam ]]; then
+    echo "Error."
+    exit 1;
+fi
 
-# Splits reads that contain Ns in their cigar string
-echo "Split reads that contain Ns in their cigar string..."
-singularity exec gatk4.sif --memory "\$6"g --bind \$PWD:/data -W /data \
-     gatk SplitNCigarReads \
-     -R \$1 \
-     -I "\$2".addRG.duprm.bam \
-     -O \$5;
-echo "DONE"
+if [[ ! -f "\$2".addRG.duprm.bam ]]; then
+	# mark duplication
+	echo "Mark duplication..."
+	singularity exec --bind \$PWD:/data -W /data ../../gatk4.sif\
+	     gatk MarkDuplicatesSpark \
+	     -I "\$2".addRG.bam \
+	     -O "\$2".addRG.duprm.bam \
+	     -M MarkDuplicatesSpark_output.metrics.txt;
+	echo "DONE"
+fi
+if [[ ! -f "\$2".addRG.duprm.bam ]]; then
+    echo "Error."
+    exit 1;
+fi
+if [[ ! -f \$5 ]]; then
+	# Splits reads that contain Ns in their cigar string
+	echo "Split reads that contain Ns in their cigar string..."
+	singularity exec --bind \$PWD:/data -W /data ../../gatk4.sif\
+	     gatk SplitNCigarReads \
+	     -R \$1 \
+	     -I "\$2".addRG.duprm.bam \
+	     -O \$5;
+	echo "DONE"
+fi
+if [[ ! -f \$5 ]]; then
+    echo "Error."
+    exit 1;
+fi
 EOT
 fi
 chmod +x ${output}/4_bam_preparation/bam_preparation_v2.sh;
