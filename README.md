@@ -10,6 +10,9 @@
 -- scripts # PiCTUREの出力を加工するための補助スクリプト
 --- visualization # 追加のvisualizationを行うための補助スクリプト
 ---- chr_dist_from_vcf # VCFファイルを元にChromosome-scale ditributionを描写するために利用
+--- fine-tuning # ファインチューニングに利用するためのデータセット作成スクリプト
+---- MethodA # STL modelの作成に利用したスクリプト
+---- MethodB # STL modelの作成に利用したスクリプト
 ```
 
 ## Run PiCTURE with Docker
@@ -237,3 +240,5 @@ sudo bash get_result.sh　\
 tar.gzファイルにはサンプル名を含む各閾値ごとのデータを全て含みます。
 
 ### 補助スクリプト
+
+scriptsディレクトリの下位に配置されたそれぞれのREADME.mdをご参照ください。
