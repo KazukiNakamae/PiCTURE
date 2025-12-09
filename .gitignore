@@ -1,0 +1,6 @@
+PiCTURE/Docker/*.fastq.gz
+PiCTURE/Docker/*.fq.gz
+PiCTURE/Docker/*.fastq
+PiCTURE/Docker/*.fq
+PiCTURE/Docker/Homo_sapiens_assembly38.fasta
+PiCTURE/Docker/*_working_directory

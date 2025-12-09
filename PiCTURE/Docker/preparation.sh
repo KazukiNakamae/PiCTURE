@@ -101,7 +101,7 @@ fi
 echo "Build Docker images for STAR with hg38 index"
 if [[ "$(docker images -q kazukinakamae/star_for_human_gatk:1.0 2> /dev/null)" == "" ]]; then
      echo "Create STAR index in docker image"
-     docker build -t kazukinakamae/star_for_human_gatk:1.0 .;
+     docker build --platform linux/amd64 -t kazukinakamae/star_for_human_gatk:1.0 .;
 else
      echo "The docker image already existed."
 fi

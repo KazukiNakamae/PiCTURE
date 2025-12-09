@@ -1,0 +1,12 @@
+name: ft_processing_env
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - scikit-learn
+  - seqkit
+  - pip
