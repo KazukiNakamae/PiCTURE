@@ -123,7 +123,7 @@ if [[ ! -f 12_motif_extraction/${file}.txt ]]; then
                -u "$(id -u $USER):$(id -g $USER)" \
                -v /etc/passwd:/etc/passwd:ro \
                -v /etc/group:/etc/group:ro \
-               --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:1.0 \
+               --platform=linux/amd64 --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:amd64_1.0 \
                weblogo \
                -f 11_snp_classification/${file} \
                -o 12_motif_extraction/${file}.png \
@@ -132,7 +132,7 @@ if [[ ! -f 12_motif_extraction/${file}.txt ]]; then
                -u "$(id -u $USER):$(id -g $USER)" \
                -v /etc/passwd:/etc/passwd:ro \
                -v /etc/group:/etc/group:ro \
-               --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:1.0 \
+               --platform=linux/amd64 --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:amd64_1.0 \
                weblogo \
                -f 11_snp_classification/${file} \
                -o 12_motif_extraction/${file}.txt \
@@ -295,7 +295,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm kazukinakamae/pysam:0.19.1 \
+     --platform=linux/amd64 --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm kazukinakamae/pysam:0.19.1 \
      python extract_flanking_seq_from_vcf.py \
      -i 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf.vcf \
      -r 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
@@ -310,7 +310,7 @@ do
           -u "$(id -u $USER):$(id -g $USER)" \
           -v /etc/passwd:/etc/passwd:ro \
           -v /etc/group:/etc/group:ro \
-          --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:1.0 \
+          --platform=linux/amd64 --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:amd64_1.0 \
           weblogo \
           -f ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf/${file} \
           -o ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf/${file}.png \
@@ -319,7 +319,7 @@ do
           -u "$(id -u $USER):$(id -g $USER)" \
           -v /etc/passwd:/etc/passwd:ro \
           -v /etc/group:/etc/group:ro \
-          --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:1.0 \
+          --platform=linux/amd64 --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:amd64_1.0 \
           weblogo \
           -f ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf/${file} \
           -o ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf/${file}.txt \
@@ -395,7 +395,7 @@ if (( $(echo "${vaf_threshold} > 0" | bc -l) )); then
           -u "$(id -u $USER):$(id -g $USER)" \
           -v /etc/passwd:/etc/passwd:ro \
           -v /etc/group:/etc/group:ro \
-          --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm kazukinakamae/pysam:0.19.1 \
+          --platform=linux/amd64 --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm kazukinakamae/pysam:0.19.1 \
           python extract_flanking_seq_from_vcf.py \
           -i 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf.vcf \
           -r 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
@@ -409,7 +409,7 @@ if (( $(echo "${vaf_threshold} > 0" | bc -l) )); then
                -u "$(id -u $USER):$(id -g $USER)" \
                -v /etc/passwd:/etc/passwd:ro \
                -v /etc/group:/etc/group:ro \
-               --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:1.0 \
+               --platform=linux/amd64 --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:amd64_1.0 \
                weblogo \
                -f ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf/${file} \
                -o ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf/${file}.png \
@@ -418,7 +418,7 @@ if (( $(echo "${vaf_threshold} > 0" | bc -l) )); then
                -u "$(id -u $USER):$(id -g $USER)" \
                -v /etc/passwd:/etc/passwd:ro \
                -v /etc/group:/etc/group:ro \
-               --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:1.0 \
+               --platform=linux/amd64 --name nakamae_motif_extraction --memory 120g -itv $PWD:/data -w /data --rm kazukinakamae/motif_extraction:amd64_1.0 \
                weblogo \
                -f ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf/${file} \
                -o ${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf/${file}.txt \
