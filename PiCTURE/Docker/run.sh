@@ -186,14 +186,11 @@ fi
 echo "Clean files..."
 rm 0_rawdata/${input_name}_F.fastq;
 rm 0_rawdata/${input_name}_R.fastq;
-rm 1_trim_galore/${input_name}_F_val_1.fq;
-rm 1_trim_galore/${input_name}_R_val_2.fq;
 rm 4_bam_preparation/${input_name}.original.bam;
-rm 4_bam_preparation/${input_name}.original.bai;
 rm 4_bam_preparation/${input_name}.original.bam.addRG.bam;
 rm 4_bam_preparation/${input_name}.original.bam.addRG.bai;
 rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bam;
-rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bai;
+rm 4_bam_preparation/${input_name}.original.bam.addRG.duprm.bam.bai;
 
 echo "Done."
 exit 0;
