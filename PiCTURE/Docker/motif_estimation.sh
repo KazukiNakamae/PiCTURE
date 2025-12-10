@@ -87,7 +87,7 @@ if [[ ! -f 11_snp_classification/${input_name}.hg38.identified.snp.fltr.all.fa ]
           -u "$(id -u $USER):$(id -g $USER)" \
           -v /etc/passwd:/etc/passwd:ro \
           -v /etc/group:/etc/group:ro \
-          --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm biocontainers/pysam:v0.15.2ds-2-deb-py3_cv1 \
+          --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w /data --rm biocontainers/pysam:v0.15.2ds-2-deb-py3_cv1 \
           python3 extract_flanking_seq_from_vcf.py \
           -i ${output}/10_snp_hard_filter/${input_name}.hg38.identified.snp.fltr.vcf \
           -r ${output}/5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
