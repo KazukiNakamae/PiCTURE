@@ -103,12 +103,12 @@ if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
     # Build JEXL: all samples must be non-reference (not HomRef)
     jexl=""
     for s in "${input_name_arr[@]}"; do
-        cond="!vc.getGenotype('${s}').isHomRef()"
-        if [[ -z "${jexl}" ]]; then
-            jexl="${cond}"
-        else
-            jexl="${jexl} && ${cond}"
-        fi
+    cond="(vc.getGenotype(\"${s}\").isCalled()&&!vc.getGenotype(\"${s}\").isHomRef())"
+    if [[ -z "${jexl}" ]]; then
+        jexl="${cond}"
+    else
+        jexl="${jexl}&&${cond}"
+    fi
     done
     echo "[INFO] JEXL = ${jexl}"
 
@@ -120,9 +120,9 @@ if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
     gatk SelectVariants \
         -V "8_vcf_identification/${set_name}.merge.vcf" \
         -O "8_vcf_identification/${set_name}.hg38.identified.vcf" \
-        --max-nocall-number 0 \
         -select "${jexl}" \
         -R "5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta"
+        
 fi
 if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
     echo "Error."
