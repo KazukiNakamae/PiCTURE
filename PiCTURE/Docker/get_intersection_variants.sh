@@ -117,12 +117,12 @@ if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/group:/etc/group:ro \
     --memory 120g -itv "$PWD:/data" -w /data --rm broadinstitute/gatk:4.3.0.0 \
-    gatk SelectVariants \
+    gatk --java-options "-DGATK_STACKTRACE_ON_USER_EXCEPTION=true" SelectVariants \
         -V "8_vcf_identification/${set_name}.merge.vcf" \
         -O "8_vcf_identification/${set_name}.hg38.identified.vcf" \
         -select "${jexl}" \
         -R "5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta"
-        
+
 fi
 if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
     echo "Error."
