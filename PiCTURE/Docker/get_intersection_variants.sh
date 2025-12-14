@@ -103,7 +103,7 @@ if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
     # Build JEXL: all samples must be called and non-reference (not HomRef)
     jexl=""
     for s in "${input_name_arr[@]}"; do
-    cond="(vc.getGenotype('${s}').isCalled() && !vc.getGenotype('${s}').isHomRef())"
+    cond="(vc.getGenotype(\"${s}\").isCalled() && ! vc.getGenotype(\"${s}\").isHomRef())"
     if [[ -z "${jexl}" ]]; then
         jexl="${cond}"
     else
