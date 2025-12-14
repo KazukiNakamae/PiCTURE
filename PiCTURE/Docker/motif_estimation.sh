@@ -295,7 +295,7 @@ docker run \
      -u "$(id -u $USER):$(id -g $USER)" \
      -v /etc/passwd:/etc/passwd:ro \
      -v /etc/group:/etc/group:ro \
-     --platform=linux/amd64 --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm kazukinakamae/pysam:0.19.1 \
+     --platform=linux/amd64 --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm kazukinakamae/pysam:amd64_0.19.1 \
      python extract_flanking_seq_from_vcf.py \
      -i 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.${vaf_threshold}_1.0vaf.vcf \
      -r 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
@@ -395,7 +395,7 @@ if (( $(echo "${vaf_threshold} > 0" | bc -l) )); then
           -u "$(id -u $USER):$(id -g $USER)" \
           -v /etc/passwd:/etc/passwd:ro \
           -v /etc/group:/etc/group:ro \
-          --platform=linux/amd64 --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm kazukinakamae/pysam:0.19.1 \
+          --platform=linux/amd64 --name nakamae_snp_classification --memory 120g -itv $PWD:/data -w / --rm kazukinakamae/pysam:amd64_0.19.1 \
           python extract_flanking_seq_from_vcf.py \
           -i 14_vaf_classification/${input_name}.hg38.identified.snp.fltr.vaf.headerfixed.0.0_${vaf_threshold}vaf.vcf \
           -r 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta \
