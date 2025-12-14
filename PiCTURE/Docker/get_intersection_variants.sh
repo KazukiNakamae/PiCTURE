@@ -97,26 +97,34 @@ if [[ ! -f 8_vcf_identification/${set_name}.merge.vcf ]]; then
     exit 1;
 fi
 
-
-
-
-
-
-
-
-
 if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
     echo "Intersect VCF..."
-    docker run \
-        -u "$(id -u $USER):$(id -g $USER)" \
-        -v /etc/passwd:/etc/passwd:ro \
-        -v /etc/group:/etc/group:ro \
-        --name nakamae_haplotypecaller --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
-        gatk SelectVariants \
-        -V 8_vcf_identification/${set_name}.merge.vcf \
-        -O 8_vcf_identification/${set_name}.hg38.identified.vcf \
-        -select 'set == "Intersection";' \
-        -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta;
+    if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
+        echo "Intersect VCF..."
+        # Build JEXL: all samples must be called and non-reference (not HomRef)
+        jexl=""
+        for s in "${input_name_arr[@]}"; do
+            cond="(vc.getGenotype('${s}').isCalled() && !vc.getGenotype('${s}').isHomRef())"
+            if [[ -z "${jexl}" ]]; then
+                jexl="${cond}"
+            else
+                jexl="${jexl} && ${cond}"
+            fi
+        done
+        echo "[INFO] JEXL = ${jexl}"
+    
+        docker run \
+            -u "$(id -u $USER):$(id -g $USER)" \
+            -v /etc/passwd:/etc/passwd:ro \
+            -v /etc/group:/etc/group:ro \
+            --name nakamae_haplotypecaller --memory 120g -itv $PWD:/data -w /data --rm broadinstitute/gatk:4.3.0.0 \
+            gatk SelectVariants \
+            -V 8_vcf_identification/${set_name}.merge.vcf \
+            -O 8_vcf_identification/${set_name}.hg38.identified.vcf \
+    -        -select 'set == "Intersection";' \
+    +        -select "${jexl}" \
+            -R 5_recal_data/resources-broad-hg38-v0-Homo_sapiens_assembly38.fasta;
+    fi
 fi
 if [[ ! -f 8_vcf_identification/${set_name}.hg38.identified.vcf ]]; then
     echo "Error."
